@@ -8,6 +8,6 @@ Based on leaflet
 -->使用修改工具进行修改
 -->下载修改后路径文件
 
-12.14
+2020.12.14
 bug描述：
 测试文件 curve.html 和 app.py中的路由 /curve ，template只能向前端传一次数据，但是后端传前端用ajax正常，后端的判断值m也在变。
