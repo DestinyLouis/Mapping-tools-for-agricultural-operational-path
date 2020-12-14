@@ -11,6 +11,7 @@ from flask_sqlalchemy import SQLAlchemy
 from barriers import barriers
 from curvature import curvature
 from lands import lands
+from proj import *
 from routes import routes
 from upload import csv2json, gen_name
 from config import Config
@@ -154,6 +155,44 @@ def upload():
         os.remove(files_tmp + file)
 
     return render_template('upload.html', form=uff)
+
+@app.route('/curve', methods=['GET', 'POST'])
+def curve():
+    m = 1
+    # mj = json.dumps(m)
+    # print(mj)
+    points = request.get_json()
+    print(points)
+    print(type(points))
+
+    # points = list(points)
+    R = 1000
+
+    if points != None:
+        for i in points:
+            i[0], i[1] = BL2UTM(i[0], i[1])
+        print(points)
+        for i in range(1001):
+            t = i / 1000
+            r = curvature(t, points[0], points[1], points[2], points[3])
+            if r < R:
+                R = r
+        turningR = 10
+        print(R)
+        if R >= turningR:
+            m = 1
+            print(m)
+        else:
+            m = 0
+            print(m)
+    # turningR = db.session.query(md.Parameter.turning_radius).all()
+    # return render_template('curve2.html', m_json=json.dumps(m))
+    # print(3333333333333333333)
+
+    # 输出m值在变，但是传不到html中
+    return render_template('curve2.html', m_json=m)
+
+
 
 @app.route('/my_leaflet')
 def my_leaflet():
